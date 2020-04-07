@@ -33,7 +33,7 @@ class EvalCog(commands.Cog):
 
 
     @commands.command(name="eval", aliases=["ev"])
-    @commands.has_permissions(PermissionLevel.OWNER)
+    @checks.has_permissions(PermissionLevel.OWNER)
     async def eval(self, ctx, *, cmd):
         """Evaluates input.
 
