@@ -99,3 +99,6 @@ class EvalCog(commands.Cog):
             result = (await eval(f"{fn_name}()", env))
             embed = discord.Embed(color=discord.Color(0x62E000), title='<:eval:486602596795023391> Result', description=f'```py\n{result}```')
             await ctx.send(embed=embed)
+
+def setup(bot):
+    bot.add_cog(EvalCog(bot))
