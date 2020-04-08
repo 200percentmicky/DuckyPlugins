@@ -21,7 +21,7 @@ class QuackUtils(commands.Cog):
         self.bot = bot
 
     @commands.command(name="timeleft", aliases=["tl", "time"])
-    @checks.has_permission(PermissionLevel.SUPPORTER)
+    @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
     async def time_left(self, ctx, after):
         """
