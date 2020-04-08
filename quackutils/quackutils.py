@@ -30,12 +30,11 @@ class QuackUtils(commands.Cog):
         def convert(seconds):
             return time.strftime("%H hours : %M minutes : %S seconds", time.gmtime(n))
 
-        thread = ctx.thread
-
         closure = self.bot.config["closures"]
-        for thread.id, items in tuple(closure.items()):
+        for recipient_id, items in tuple(closure.items()):
             after = (datetime.fromisoformat(items["time"]) - datetime.utcnow()).total_seconds()
             n = convert(after)
+            thread = ctx.thread
             if thread.close_task is not None or thread.auto_close_task is not None:
                 embed = discord.Embed(
                     color=self.bot.error_color,
