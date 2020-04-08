@@ -18,9 +18,6 @@ class QuackUtils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def convert(seconds):
-        return time.strftime("%H hours : %M minutes : %S seconds", time.gmtime(n))
-
     @commands.command(name="timeleft", aliases=["tl", "time"])
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
@@ -30,9 +27,12 @@ class QuackUtils(commands.Cog):
         close.
         """
 
+        def convert(seconds):
+            return time.strftime("%H hours : %M minutes : %S seconds", time.gmtime(n))
+
         thread = ctx.thread
-        
-        closure = self.config["closures"]
+
+        closure = self.bot.config["closures"]
         for thread.id, items in tuple(closure.items()):
             after = (datetime.fromisoformat(items["time"]) - datetime.utcnow()).total_seconds()
             n = convert(after)
