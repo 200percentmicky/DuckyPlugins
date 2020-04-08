@@ -27,7 +27,7 @@ class QuackUtils(commands.Cog):
         close.
         """
 
-        def convert(self, seconds):
+        def convert(seconds):
             return time.strftime("%H hours : %M minutes : %S seconds", time.gmtime(seconds))
 
         closure = self.bot.config["closures"]
