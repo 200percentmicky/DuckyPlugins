@@ -35,7 +35,7 @@ class QuackUtils(commands.Cog):
             after = (datetime.fromisoformat(items["time"]) - datetime.utcnow()).total_seconds()
             n = convert(after)
             thread = ctx.thread
-            if thread.close_task is not None or thread.auto_close_task is not None:
+            if thread.close_task is None or thread.auto_close_task is None:
                 embed = discord.Embed(
                     color=self.bot.error_color,
                     description="This thread is not set to close automatically."
