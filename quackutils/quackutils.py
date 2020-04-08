@@ -8,8 +8,6 @@ import discord
 from discord.ext import commands
 
 from core import checks
-from core._color_data import ALL_COLORS
-from core.time import UserFriendlyTime, human_timedelta
 from core.thread import Thread
 from core.models import PermissionLevel
 from core.utils import *
@@ -20,20 +18,24 @@ class QuackUtils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    def convert(seconds):
+        return time.strftime("%H hours : %M minutes : %S seconds", time.gmtime(n))
+
     @commands.command(name="timeleft", aliases=["tl", "time"])
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     @checks.thread_only()
-    async def time_left(self, ctx, after):
+    async def time_left(self, ctx):
         """
         Provides a duration for how long a thread will automatically
         close.
         """
 
-        human_delta = human_timedelta(after.dt)
-
+        thread = ctx.thread
+        
         closure = self.config["closures"]
         for thread.id, items in tuple(closure.items()):
-            thread = ctx.thread
+            after = (datetime.fromisoformat(items["time"]) - datetime.utcnow()).total_seconds()
+            n = convert(after)
             if thread.close_task is not None or thread.auto_close_task is not None:
                 embed = discord.Embed(
                     color=self.bot.error_color,
@@ -42,7 +44,7 @@ class QuackUtils(commands.Cog):
             else:
                 embed = discord.Embed(
                     color=self.bot.main_color,
-                    description=f"About {human_delta} left until the thread closes."
+                    description=f"About {n} left until the thread closes."
                 )
             
             return await ctx.send(embed=embed)
