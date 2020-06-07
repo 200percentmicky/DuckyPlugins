@@ -30,8 +30,7 @@ class QuackUtils(commands.Cog):
         Only works if the bot is handled by a process manager.
         """
 
-        channel = self.bot.get_channel(603735567733227531)
-        await channel.send(embed=discord.Embed(
+        await ctx.send(embed=discord.Embed(
             color=37887,
             description="🔁 Restarting..."
         ))
