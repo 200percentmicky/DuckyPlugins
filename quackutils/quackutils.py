@@ -7,10 +7,14 @@ from natural.date import duration
 import discord
 from discord.ext import commands
 
+import logging
+
 from core import checks
 from core.thread import Thread
 from core.models import PermissionLevel
 from core.utils import *
+
+logger = logging.getLogger("Modmail")
 
 class QuackUtils(commands.Cog):
     """Custom Commands for Ducky Mail"""
@@ -18,35 +22,23 @@ class QuackUtils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="timeleft", aliases=["tl", "time"])
-    @checks.has_permissions(PermissionLevel.SUPPORTER)
-    @checks.thread_only()
-    async def time_left(self, ctx):
+    @commands.command(name="restart", aliases=["reboot"])
+    @checks.has_permissions(PermissionLevel.OWNER)
+    async def restart(self, ctx):
         """
-        Provides a duration for how long a thread will automatically
-        close.
+        Reboots the bot.
+        Only works if the bot is handled by a process manager.
         """
 
-        def convert(seconds):
-            return time.strftime("%H hours : %M minutes : %S seconds", time.gmtime(seconds))
-
-        closure = self.bot.config["closures"]
-        for recipient_id, items in tuple(closure.items()):
-            after = (datetime.fromisoformat(items["time"]) - datetime.utcnow()).total_seconds()
-            n = convert(after)
-            thread = ctx.thread
-            if thread.close_task is None or thread.auto_close_task is None:
-                embed = discord.Embed(
-                    color=self.bot.error_color,
-                    description="This thread is not set to close automatically."
-                )
-            else:
-                embed = discord.Embed(
-                    color=self.bot.main_color,
-                    description=f"About {n} left until the thread closes."
-                )
-            
-            return await ctx.send(embed=embed)
+        channel = self.bot.get_channel(603735567733227531)
+        await channel.send(embed=discord.Embed(
+            color=37887,
+            description="🔁 Restarting..."
+        ))
+        user = ctx.message.author
+        logger.info(f"Restart initiated by {user.name}#{user.discriminator} ({user.id})")
+        logger.info("Rebooting bot...")
+        await ctx.bot.logout()
 
 def setup(bot):
     bot.add_cog(QuackUtils(bot))
