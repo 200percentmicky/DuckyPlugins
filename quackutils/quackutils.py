@@ -1,16 +1,8 @@
-import time
-from datetime import datetime
-
-from dateutil import parser
-from natural.date import duration
-
 import discord
 from discord.ext import commands
-
 import logging
 
 from core import checks
-from core.thread import Thread
 from core.models import PermissionLevel
 from core.utils import *
 
